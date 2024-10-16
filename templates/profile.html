@@ -1,0 +1,86 @@
+{% extends 'main.html'%}
+{% load static%}
+
+{% block header %}
+
+<!-- Header Start -->
+<div class="container-fluid bg-breadcrumb">
+    <div class="container text-center py-5" style="max-width: 900px;">
+        <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Profile</h4>    
+    </div>
+</div>
+<!-- Header End -->
+
+<div class="container-fluid contact bg-light py-5">
+    <div class="container py-5">
+        <div class="row g-5">
+
+            <div class="card py-4 wow fadeInRight" data-wow-delay="0.4s">
+
+                <div class="profile-container">
+                    <h2>User Profile</h2>
+
+                    <div class="border-under py-5 d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4>Username:</h4> 
+                            <span class="fs-4">{{ user_profile.user.username }}</span>
+                        </div>
+                        <div>
+                            <a href="{% url 'edit_profile' field='username' %}" class="btn btn-primary btn-lg">Edit</a>
+                        </div>
+                    </div>
+                    
+                    <div class="border-under py-5 d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4>Email:</h4> 
+                            <span class="fs-4">{{ user_profile.user.email }}</span>
+                        </div>
+                        <div>
+                            <a href="{% url 'edit_profile' field='email' %}" class="btn btn-primary btn-lg">Edit</a>
+                        </div>
+                    </div>
+                    
+                    <div class="border-under py-5 d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4>State:</h4> 
+                            <span class="fs-4">{{ user_profile.state }}</span>
+                        </div>
+                        <div>
+                            <a href="{% url 'edit_profile' field='state' %}" class="btn btn-primary btn-lg">Edit</a>
+                        </div>
+                    </div>
+                    
+                    <div class="border-under py-5 d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4>Phone:</h4> 
+                            <span class="fs-4">{{ user_profile.phone }}</span>
+                        </div>
+                        <div>
+                            <a href="{% url 'edit_profile' field='phone' %}" class="btn btn-primary btn-lg">Edit</a>
+                        </div>
+                    </div>
+                    
+                    <div class="border-under py-5 d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4>Profile Picture:</h4><br>
+                            {% if user_profile.profile_picture %}
+                                <img src="{{ user_profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid" style="width: 200px; height: auto;">
+                            {% else %}
+                                <p>No profile picture uploaded.</p>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <a href="{% url 'edit_profile' field='profile_picture' %}" class="btn btn-primary btn-lg">Edit</a>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </div>        
+
+</div>
+
+{% endblock %}

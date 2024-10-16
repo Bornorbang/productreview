@@ -1,0 +1,39 @@
+{% extends 'main.html'%}
+{% load static%}
+
+{% block header %}
+
+
+<div class="container-fluid contact bg-light py-5">
+    <div class="container py-5">
+        <div class="row g-5">
+
+            <div class="card py-4 wow fadeInRight" data-wow-delay="0.4s">
+                <h2 class="text-primary">Edit {{ field|capfirst }}</h2>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label for="{{ field }}">{{ field|capfirst }}</label>
+
+                        {% if field == 'profile_picture' %}
+                            <input type="file" class="form-control" id="{{ field }}" name="{{ field }}">
+                        {% else %}
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="{{ field }}" 
+                                   name="{{ field }}" 
+                                   value="{% if field == 'username' %}{{ request.user.username }}
+                                          {% elif field == 'email' %}{{ request.user.email }}
+                                          {% elif field == 'phone' %}{{ profile.phone }}
+                                          {% elif field == 'state' %}{{ profile.state }}{% endif %}">
+                        {% endif %}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-3">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>            
+{% endblock %}

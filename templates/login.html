@@ -1,0 +1,63 @@
+{% extends 'main.html'%}
+{% load static%}
+
+{% block header %}
+
+<!-- Header Start -->
+<div class="container-fluid bg-breadcrumb">
+    <div class="container text-center py-5" style="max-width: 900px;">
+        <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Login</h4>    
+    </div>
+</div>
+<!-- Header End -->
+
+<!-- Login Start -->
+<div class="container-fluid contact bg-light py-5">
+    <div class="container py-5">
+        <div class="row g-5">
+
+            <div class="card py-4 wow fadeInRight" data-wow-delay="0.4s">
+                <div>
+                    <h4 class="text-primary">Login to Your Account</h4>
+                    {% for message in messages%}
+                        {% if message.tags == "error" %}
+                            <div class="alert alert-danger alert-dismissible" role="alert">
+                                <p class="mb-4">{{message}}</p>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                </button>
+                            </div>
+                        {% endif %}
+
+                    {% endfor %}
+                    {% comment %} <p class="mb-4 alert alert-primary" role="alert">You will be contacting ProductReview.com.ng, an independent consumer opinion website. We are not representatives of any brands or companies featured on this site and are not able to answer any questions on their behalf.</p> {% endcomment %}
+                    <form method="post" action="{% url 'user_login' %}">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="username" placeholder="Your Name" name="username" required>
+                                    <label for="name">Your Name</label>
+                                </div>
+                            </div>
+                            
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input type="password" class="form-control" id="password" placeholder="Create a password" name="password" required>
+                                    <label for="password">Password</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <button class="btn btn-primary w-100 py-3">Login</button>
+                            </div>
+                        </div>
+                    </form>
+                    <p class="text-center mt-3">Don't Have an Account? <a href="{% url 'signup' %}">Sign up here</a></p>
+                </div>
+            </div>
+           
+        </div>
+    </div>
+</div>
+<!-- Login End -->
+
+{% endblock %}

@@ -1,0 +1,212 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{%block title%}Product Review Nigeria | #1 Review Platform in Nigeria{% endblock %}
+{% block header%}
+
+<!-- Carousel Start -->
+<div class="header-carousel owl-carousel">
+    <div class="header-carousel-item bg-primary">
+        <div class="carousel-caption">
+            <div class="container">
+                <div class="row g-4 align-items-center">
+                    <div class="col-lg-7 animated fadeInLeft">
+                        <div class="text-sm-center text-md-start">
+                            <h4 class="text-white text-uppercase fw-bold mb-4">Welcome To {{general_info.company_name}}</h4>
+                            <h1 class="display-1 text-white mb-4">Your Opinion Matters</h1>
+                            <p class="mb-5 fs-5"> Product Review Nigeria is a community of consumers helping each other make better purchasing decisions.
+                            </p>
+                            <div class="d-flex justify-content-center justify-content-md-start flex-shrink-0 mb-4">
+                                {% if not user.is_authenticated%}
+                                    <a class="btn btn-light rounded-pill py-3 px-4 px-md-5 me-2" href="{% url 'signup' %}"> Sign Up</a>
+                                {% else %}
+                                <a class="btn btn-light rounded-pill py-3 px-4 px-md-5 me-2" href="{% url 'profile' %}"> View Profile</a>
+                                {% endif %}
+                                <a class="btn btn-dark rounded-pill py-3 px-4 px-md-5 ms-2" href="{% url 'review' %}">Write a Review</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 animated fadeInRight">
+                        <div class="calrousel-img" style="object-fit: cover;">
+                            <img src="{% static 'assets/img/carousel-2.png' %}" class="img-fluid w-100" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="header-carousel-item bg-primary">
+        <div class="carousel-caption">
+            <div class="container">
+                <div class="row gy-4 gy-lg-0 gx-0 gx-lg-5 align-items-center">
+                    <div class="col-lg-5 animated fadeInLeft">
+                        <div class="calrousel-img">
+                            <img src="{% static 'assets/img/carousel-2.png' %}" class="img-fluid w-100" alt="">
+                        </div>
+                    </div>
+                    <div class="col-lg-7 animated fadeInRight">
+                        <div class="text-sm-center text-md-end">
+                            <h4 class="text-white text-uppercase fw-bold mb-4">Welcome To Product Review Nigeria</h4>
+                            <h1 class="display-1 text-white mb-4">Voice out your Product Reviews</h1>
+                            <p class="mb-5 fs-5">We connects consumers with genuine feedback on products and services, helping you make informed choices.
+                            </p>
+                            <div class="d-flex justify-content-center justify-content-md-end flex-shrink-0 mb-4">
+                                {% if not user.is_authenticated%}
+                                    <a class="btn btn-light rounded-pill py-3 px-4 px-md-5 me-2" href="{% url 'signup' %}"> Sign Up</a>
+                                {% else %}
+                                    <a class="btn btn-light rounded-pill py-3 px-4 px-md-5 me-2" href="{% url 'profile' %}"> View Profile</a>
+                                {% endif %}
+                                <a class="btn btn-dark rounded-pill py-3 px-4 px-md-5 ms-2" href="{% url 'review' %}">Write a Review </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Carousel End -->
+
+<!-- Categories Start-->
+
+<div>
+    <div class="text-center mx-auto mt-5 mb-3 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
+        <h4 class="display-4">Popular Categories</h4>
+        <p class="mb-0">Browse Our Most Popular Categories
+        </p>
+    </div>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-3 mb-4">
+                <a href="{% url 'category_detail' category_id=4 %}">
+                    <div class="custom-card" style="background-image: url('https://images.autotrader.com/hn/c/f723ba56de924a3da354428a4fd06540.jpg');">
+                        <h5 class="card-title">Cars</h5>
+                        <p class="card-text">1129 reviews</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3 mb-4">
+                <a href="{% url 'category_detail' category_id=6 %}">
+                    <div class="custom-card" style="background-image: url('https://cdn.productreview.com.au/resize/featured-category-picture/coffee-machines?cover=true&height=200&quality=60&v=2&width=500');">
+                        <h5 class="card-title">Coffee Manchines</h5>
+                        <p class="card-text">1129 reviews</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3 mb-4">
+                <a href="{% url 'category_detail' category_id=7 %}">
+                    <div class="custom-card" style="background-image: url('https://cdn.productreview.com.au/resize/featured-category-picture/diets-weight-loss?cover=true&height=200&quality=60&v=2&width=500');">
+                        <h5 class="card-title">Diet & Weight Loss</h5>
+                        <p class="card-text">1129 reviews</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3 mb-4">
+                <a href="{% url 'category_detail' category_id=5 %}">
+                    <div class="custom-card" style="background-image: url('https://franchiseindia.s3.ap-south-1.amazonaws.com/uploads/content/wi/art/5b0be03cefcc8.jpg');">
+                        <h5 class="card-title">Cosmetics</h5>
+                        <p class="card-text">1129 reviews</p>
+                    </div>
+                </a>
+            </div>
+            <!-- Add more cards for the second row -->
+            <div class="col-12 col-md-6 col-lg-3 mb-4">
+                <a href="{% url 'category_detail' category_id=3 %}">
+                    <div class="custom-card" style="background-image: url('https://www.usatoday.com/gcdn/authoring/authoring-images/2024/02/29/USAT/72788592007-getty-images-1407832840.jpg');">
+                        <h5 class="card-title">Foods</h5>
+                        <p class="card-text">1129 reviews</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3 mb-4">
+                <a href="{% url 'category_detail' category_id=2 %}">
+                    <div class="custom-card" style="background-image: url('https://t4.ftcdn.net/jpg/03/64/41/07/360_F_364410756_Ev3WoDfNyxO9c9n4tYIsU5YBQWAP3UF8.jpg');">
+                        <h5 class="card-title">Electronics</h5>
+                        <p class="card-text">1129 reviews</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3 mb-4">
+                <a href="{% url 'category_detail' category_id=1 %}" style="text-decoration: none;">
+                    <div class="custom-card" style="background-image: url('https://m-cdn.phonearena.com/images/article/64576-wide-two_1200/The-Best-Phones-to-buy-in-2024.jpg');">
+                        <h5 class="card-title">Phones & Gadgets</h5>
+                        <p class="card-text">1129 reviews</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3 mb-4">
+                <a href="{% url 'category_detail' category_id=8 %}">
+                    <div class="custom-card" style="background-image: url('https://s7280.pcdn.co/wp-content/uploads/2019/08/defining-what-is-an-it-service.png');">
+                        <h5 class="card-title">Services</h5>
+                        <p class="card-text">1129 reviews</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Categories End-->
+
+<!-- Testimonial Start -->
+<div class="container-fluid testimonial pb-5">
+    <div class="container pb-3">
+        <div class="text-center mx-auto mt-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
+            <h4 class="display-4 mb-4">Featured Reviews</h4>
+            <p class="mb-0">Browse some of our latest reviews
+            </p>
+        </div>
+        <div class="owl-carousel testimonial-carousel wow fadeInUp" data-wow-delay="0.2s">
+                {% for review in reviews%}
+                    
+                <a href="{% url 'category_detail' review.category.id %}" class="text-decoration-none">
+                    <div class="testimonial-item bg-light rounded">
+                        <div class="row g-0">
+                            <div class="col-4  col-lg-4 col-xl-3">
+                                <div class="h-100">
+                                    <img src="{{ review.picture.url }}" class="img-fluid h-100 rounded" style="object-fit: cover;" alt="">
+                                </div>
+                            </div>
+                            <div class="col-8 col-lg-8 col-xl-9">
+                                <div class="d-flex flex-column my-auto text-start p-4">
+                                    <h4 class="text-dark mb-0 border-bottom pb-1">{{ review.seller }}</h4>
+                                    <h4 class="card-title text-dark my-3"><b>{{ review.title}}</b><h4>
+                                        <div class="d-flex align-items-center mb-3">
+                                            <!-- Rating stars -->
+                                            <div class="d-flex text-primary me-auto">
+                                                {% for star in "x"|ljust:review.rating%}
+                                                    <i class="bi bi-star-fill" style="color: #ffc107"></i>
+                                                {% endfor %}
+                                            </div>
+                                            
+                                            <!-- Time since posted -->
+                                            <p class="card-subtitle text-muted fs-5">
+                                                {{ review.hours_since }} hr{{ review.hours_since|pluralize }} ago
+                                            </p>
+                                        </div>
+                                    <h5 class="card-title text-dark">{{ review.review|truncatechars:80}}</b><h5>
+                                    </p>
+                                    <h6 class="card-subtitle mb-2 text-muted">Posted by:</h6>
+                                    <div class="d-flex align-items-center fs-7">
+                                        <img src="{{ review.user.userprofile.profile_picture.url }}" 
+                                        alt="User Profile Picture" 
+                                        class="rounded-circle shadow-4-strong" 
+                                        style="width: 50px; height: 50px; object-fit: cover; border: 2px solid #ddd;">
+                                        <span class="fw-bold">{{ review.user.username }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                        </div>
+                    </div>
+                    </a>
+                {% endfor %}
+           
+        </div>
+    </div>
+</div>
+<!-- Testimonial End -->
+
+{% endblock %}
+
+
+</html>

@@ -1,0 +1,164 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Write a Review</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:slnt,wght@-10..0,100..900&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link rel="stylesheet" href= "{% static 'assets/lib/animate/animate.min.css' %}" />
+    <link href= "{% static 'assets/lib/lightbox/css/lightbox.min.css' %}" rel="stylesheet">
+    <link href= "{% static 'assets/lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href= "{% static 'assets/css/style.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body>
+    {% include 'assets/header.html'%}
+    <!-- Contact Start -->
+    <div class="container-fluid contact bg-light py-5">
+        <div class="container py-5">
+            <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
+                <h1 class="display-4 mb-4">Write a Review</h1>
+            </div>
+            <div class="row g-5">
+    
+                <div class="card py-4 wow fadeInRight" data-wow-delay="0.4s">
+                    <div>
+                        <h4 class="text-primary">Write a Review</h4>
+
+
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="name" name="product_name" placeholder="Product name" required>
+                                        <label for="name">Product name</label>
+                                    </div>
+                                </div>
+                        
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <label for="category">Category</label>
+                                        <select name="category" class="form-control" required>
+                                            <option value="" disabled selected>Select Category</option>
+                                            {% for category in categories %}
+                                                <option value="{{ category.id }}">{{ category.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                        
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="brand" name="brand" placeholder="Brand" required>
+                                        <label for="brand">Brand</label>
+                                    </div>
+                                </div>
+                        
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="seller" name="seller" placeholder="Seller" required>
+                                        <label for="seller">Seller</label>
+                                    </div>
+                                </div>
+                        
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <input type="url" class="form-control" id="website" name="website" placeholder="Website">
+                                        <label for="website">Website</label>
+                                    </div>
+                                </div>
+                        
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <textarea class="form-control" id="message" name="review" placeholder="Write your review" style="height: 120px" required></textarea>
+                                        <label for="message">Write your Review</label>
+                                    </div>
+                                </div>
+                        
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="title" name="title" placeholder="Give your review a title" required>
+                                        <label for="title">Give your review a title</label>
+                                    </div>
+                                </div>
+                        
+                                <div class="col-12">
+                                    <label for="rating">Rating:</label>
+                                    <div class="star-rating">
+                                        <input type="radio" name="rating" id="rating5" value="5" required>
+                                        <label for="rating5" title="5"></label>
+                                        <input type="radio" name="rating" id="rating4" value="4" required>
+                                        <label for="rating4" title="4"></label>
+                                        <input type="radio" name="rating" id="rating3" value="3" required>
+                                        <label for="rating3" title="3"></label>
+                                        <input type="radio" name="rating" id="rating2" value="2" required>
+                                        <label for="rating2" title="2"></label>
+                                        <input type="radio" name="rating" id="rating1" value="1" required>
+                                        <label for="rating1" title="1"></label>
+                                    </div>
+                                </div>
+                        
+                                <div class="form-group mt-3">
+                                    <label for="picture">Attach public photos and videos</label><br><br>
+                                    <input type="file" class="form-control-file" id="picture" name="picture">
+                                </div>
+                        
+                                <div class="d-flex justify-content-center align-items-center my-5">
+                                    <div class="col-lg-6">
+                                        <button type="submit" class="btn btn-primary w-100 py-3">Submit Review</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        
+                    </div>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+    <!-- Contact End -->
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-primary btn-lg-square rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
+
+    
+    <!-- JavaScript Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'assets/lib/wow/wow.min.js' %}"></script>
+    <script src="{% static 'assets/lib/easing/easing.min.js' %}"></script>
+    <script src="{% static 'assets/lib/waypoints/waypoints.min.js' %}"></script>
+    <script src="{% static 'assets/lib/counterup/counterup.min.js' %}"></script>
+    <script src="{% static 'assets/lib/lightbox/js/lightbox.min.js' %}"></script>
+    <script src="{% static 'assets/lib/owlcarousel/owl.carousel.min.js' %}"></script>
+    
+
+    <!-- Template Javascript -->
+    <script src="{% static 'assets/js/main.js' %}"></script>
+</body>
+</html>

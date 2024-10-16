@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Template</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            color: #000000;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: auto;
+            border: 1px solid #3a754e;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .header {
+            background-color: #3a754e;
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+        }
+        .content {
+            padding: 20px;
+        }
+        .footer {
+            background-color: #f8f8f8;
+            text-align: center;
+            padding: 10px;
+            font-size: 12px;
+            color: #888888;
+        }
+        a {
+            color: #3a754e;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>{{contact_subject}}</h1>
+        </div>
+        <div class="content">
+            <p>Dear {{contact_name}},</p>
+            <p>Thank you for signing up! We're excited to have you on board.</p>
+            <p>{{contact_message}}</p>
+        </div>
+        <div class="footer">
+            <p>&copy; 2024 {{general_info.company_name}}. All rights reserved.</p>
+            <p><a href="{% url 'privacypolicy' %}">Privacy Policy</a> | <a href="{% url 'terms' %}">Terms of Service</a></p>
+        </div>
+    </div>
+</body>
+</html>
