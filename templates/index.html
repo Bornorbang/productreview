@@ -77,72 +77,18 @@
     </div>
     <div class="container mt-4">
         <div class="row">
-            <div class="col-12 col-md-6 col-lg-3 mb-4">
-                <a href="{% url 'category_detail' category_id=4 %}">
-                    <div class="custom-card" style="background-image: url('https://images.autotrader.com/hn/c/f723ba56de924a3da354428a4fd06540.jpg');">
-                        <h5 class="card-title">Cars</h5>
-                        <p class="card-text">1129 reviews</p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-12 col-md-6 col-lg-3 mb-4">
-                <a href="{% url 'category_detail' category_id=6 %}">
-                    <div class="custom-card" style="background-image: url('https://cdn.productreview.com.au/resize/featured-category-picture/coffee-machines?cover=true&height=200&quality=60&v=2&width=500');">
-                        <h5 class="card-title">Coffee Manchines</h5>
-                        <p class="card-text">1129 reviews</p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-12 col-md-6 col-lg-3 mb-4">
-                <a href="{% url 'category_detail' category_id=7 %}">
-                    <div class="custom-card" style="background-image: url('https://cdn.productreview.com.au/resize/featured-category-picture/diets-weight-loss?cover=true&height=200&quality=60&v=2&width=500');">
-                        <h5 class="card-title">Diet & Weight Loss</h5>
-                        <p class="card-text">1129 reviews</p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-12 col-md-6 col-lg-3 mb-4">
-                <a href="{% url 'category_detail' category_id=5 %}">
-                    <div class="custom-card" style="background-image: url('https://franchiseindia.s3.ap-south-1.amazonaws.com/uploads/content/wi/art/5b0be03cefcc8.jpg');">
-                        <h5 class="card-title">Cosmetics</h5>
-                        <p class="card-text">1129 reviews</p>
-                    </div>
-                </a>
-            </div>
-            <!-- Add more cards for the second row -->
-            <div class="col-12 col-md-6 col-lg-3 mb-4">
-                <a href="{% url 'category_detail' category_id=3 %}">
-                    <div class="custom-card" style="background-image: url('https://www.usatoday.com/gcdn/authoring/authoring-images/2024/02/29/USAT/72788592007-getty-images-1407832840.jpg');">
-                        <h5 class="card-title">Foods</h5>
-                        <p class="card-text">1129 reviews</p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-12 col-md-6 col-lg-3 mb-4">
-                <a href="{% url 'category_detail' category_id=2 %}">
-                    <div class="custom-card" style="background-image: url('https://t4.ftcdn.net/jpg/03/64/41/07/360_F_364410756_Ev3WoDfNyxO9c9n4tYIsU5YBQWAP3UF8.jpg');">
-                        <h5 class="card-title">Electronics</h5>
-                        <p class="card-text">1129 reviews</p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-12 col-md-6 col-lg-3 mb-4">
-                <a href="{% url 'category_detail' category_id=1 %}" style="text-decoration: none;">
-                    <div class="custom-card" style="background-image: url('https://m-cdn.phonearena.com/images/article/64576-wide-two_1200/The-Best-Phones-to-buy-in-2024.jpg');">
-                        <h5 class="card-title">Phones & Gadgets</h5>
-                        <p class="card-text">1129 reviews</p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-12 col-md-6 col-lg-3 mb-4">
-                <a href="{% url 'category_detail' category_id=8 %}">
-                    <div class="custom-card" style="background-image: url('https://s7280.pcdn.co/wp-content/uploads/2019/08/defining-what-is-an-it-service.png');">
-                        <h5 class="card-title">Services</h5>
-                        <p class="card-text">1129 reviews</p>
-                    </div>
-                </a>
-            </div>
+            {% for category in categories %}
+                <div class="col-12 col-md-6 col-lg-3 mb-4">
+                    <a href="{% url 'category_detail' category_id=category.id %}">
+                        <div class="custom-card" style="background-image: url('{{ category.image_url }}');">
+                            <h5 class="card-title">{{ category.name }}</h5>
+                            <p class="card-text">{{ category.review_count }} reviews</p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
         </div>
+        
     </div>
 </div>
 <!--Categories End-->
@@ -174,16 +120,16 @@
                                             <!-- Rating stars -->
                                             <div class="d-flex text-primary me-auto">
                                                 {% for star in "x"|ljust:review.rating%}
-                                                    <i class="bi bi-star-fill" style="color: #ffc107"></i>
+                                                    <i class="bi bi-star-fill" style="color: #ffc107; font-size: 16px"></i>
                                                 {% endfor %}
                                             </div>
                                             
                                             <!-- Time since posted -->
-                                            <p class="card-subtitle text-muted fs-5">
+                                            <p class="card-subtitle text-muted fs-6">
                                                 {{ review.hours_since }} hr{{ review.hours_since|pluralize }} ago
                                             </p>
                                         </div>
-                                    <h5 class="card-title text-dark">{{ review.review|truncatechars:80}}</b><h5>
+                                    <p class="card-title fs-6">{{ review.review|truncatechars:80}}</p>
                                     </p>
                                     <h6 class="card-subtitle mb-2 text-muted">Posted by:</h6>
                                     <div class="d-flex align-items-center fs-7">

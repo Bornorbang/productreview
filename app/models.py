@@ -32,16 +32,22 @@ class UserProfile(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
+    image_url = models.URLField(blank=True, null=True)  # For displaying category images
 
     def __str__(self):
         return self.name
-    
+
+    def review_count(self):
+        """Returns the number of reviews in this category."""
+        return self.reviews.count()  # Uses the related_name in the Review model
+
+
 class Review(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)  # If you want to link it to a user
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     product_name = models.CharField(max_length=255, blank=True, null=True)
     brand = models.CharField(max_length=255, blank=True, null=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    seller = models.CharField(max_length=255, null=True, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='reviews')  # Added related_name
+    seller = models.CharField(max_length=255, blank=True, null=True)
     title = models.CharField(max_length=255, blank=True, null=True)
     picture = models.ImageField(upload_to='reviews/', blank=True, null=True)
     review = models.TextField()

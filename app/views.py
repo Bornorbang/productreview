@@ -19,21 +19,24 @@ from django.shortcuts import get_object_or_404, render
 from django.utils.timezone import now
 
 def index(request):
-    reviews = Review.objects.all().order_by('-created_at')
-
-    # Initialize user_profile to None in case the user is anonymous
+    # Fetch all categories with their related reviews
+    categories = Category.objects.prefetch_related('reviews').all()
+    
+    # Initialize user_profile to None for anonymous users
     user_profile = None  
 
-    # Only try to get the UserProfile if the user is authenticated
+    # Get UserProfile only if the user is authenticated
     if request.user.is_authenticated:
         user_profile = get_object_or_404(UserProfile, user=request.user)
 
-    # Calculate hours since the review was created
+    # Fetch the latest reviews and calculate hours since creation
+    reviews = Review.objects.all().order_by('-created_at')
     for review in reviews:
         delta = now() - review.created_at
         review.hours_since = int(delta.total_seconds() // 3600)
 
     context = {
+        'categories': categories,  # Pass categories to template
         'reviews': reviews,
         'user_profile': user_profile,
     }
