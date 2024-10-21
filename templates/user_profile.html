@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ profile.user.username }}'s Profile</title>
+    <style>
+        .message-box {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .message {
+            padding: 5px;
+            margin-bottom: 5px;
+            border-bottom: 1px solid #ddd;
+        }
+        .message.sent { text-align: right; }
+    </style>
+</head>
+<body>
+    <h1>{{ profile.user.username }}'s Profile</h1>
+    <p>Email: {{ profile.user.email }}</p>
+    <p>Phone: {{ profile.phone }}</p>
+
+    <h2>Conversation</h2>
+    <div class="message-box">
+        {% for message in conversation %}
+            <div class="message {% if message.sender == request.user %}sent{% endif %}">
+                <strong>{{ message.sender.username }}:</strong> {{ message.content }}
+            </div>
+        {% empty %}
+            <p>No messages yet. Start a conversation!</p>
+        {% endfor %}
+    </div>
+
+    <form method="POST">
+        {% csrf_token %}
+        <textarea name="content" rows="3" placeholder="Type your message..." required></textarea><br>
+        <button type="submit">Send Message</button>
+    </form>
+
+    <a href="{% url 'inbox' %}">Back to Inbox</a>
+</body>
+</html>

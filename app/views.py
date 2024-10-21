@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
-from app.models import Review, UserProfile, Category
+from django.http import HttpResponse, JsonResponse
+from app.models import Review, UserProfile, Category, Message, Room, Roommessage
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, login as auth_login, logout
 from django.contrib import messages
@@ -8,10 +8,11 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
-from app.forms import RegisterForm, UserProfileForm, ReviewForm
+from app.forms import RegisterForm, UserProfileForm, ReviewForm, MessageForm
 from datetime import datetime
 from django.utils.timezone import make_aware, now
-
+from django.db.models import Q
+from django.db.models.functions import Lower
 
 # Create your views here.
 
@@ -306,3 +307,144 @@ def edit_profile(request, field):
         return redirect('profile')  # Redirect to profile page after saving changes
 
     return render(request, 'edit_profile_field.html', {'field': field, 'profile': profile})
+
+
+@login_required(login_url='user_login')
+def inbox(request):
+    messages = Message.objects.filter(receiver=request.user).select_related('sender')
+    return render(request, 'messaging/inbox.html', {'messages': messages})
+
+@login_required
+def conversation(request, username):
+    other_user = get_object_or_404(User, username=username)
+    # Query for messages between the two users
+    messages = Message.objects.filter(
+        Q(sender=request.user, receiver=other_user) |
+        Q(sender=other_user, receiver=request.user)
+    ).order_by('timestamp')
+
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            new_message = form.save(commit=False)
+            new_message.sender = request.user
+            new_message.receiver = other_user
+            new_message.save()
+            return redirect('conversation', username=other_user.username)
+    else:
+        form = MessageForm()
+
+    return render(request, 'messaging/conversation.html', {
+        'messages': messages, 'form': form, 'other_user': other_user
+    })
+
+def user_profile(request, username):
+    user = get_object_or_404(User, username=username)
+    profile = get_object_or_404(UserProfile, user=user)
+    other_user = get_object_or_404(User, username=username)
+    
+    # If a message is sent via POST, create a new message object
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        if content:
+            Message.objects.create(
+                sender=request.user,
+                receiver=user,
+                content=content
+            )
+            return redirect('user_profile', username=username)  # Stay on the profile page after sending
+
+    # Fetch existing conversation between the logged-in user and the profile owner
+    conversation = Message.objects.filter(
+        Q(sender=request.user, receiver=other_user) |
+        Q(sender=other_user, receiver=request.user)
+    ).order_by('timestamp')
+
+    context = {
+        'profile': profile,
+        'conversation': conversation,
+    }
+    return render(request, 'user_profile.html', context)
+
+def send_message(request, username):
+    if request.method == 'POST':
+        receiver = get_object_or_404(User, username=username)
+        Message.objects.create(sender=request.user, receiver=receiver, content='Hi!')
+        return redirect('inbox')
+    
+@login_required(login_url='user_login')
+def joinroom(request):
+    username = request.user.username
+    rooms = Room.objects.all().annotate(name_lower=Lower('name')).order_by('name_lower')
+
+    context = {
+        "username": username,
+        "rooms": rooms,
+    }
+
+    return render(request, 'room/join.html', context)
+
+@login_required(login_url='user_login')
+def room(request, room):
+    username = request.user.username
+    room_details = Room.objects.get(name=room)
+
+    context = {
+        "username": username,
+        "room_details": room_details,
+        "room": room
+    }
+
+    return render(request, 'room/room.html', context)
+
+@login_required(login_url='user_login')
+def checkroom(request):
+    room = request.POST['room_name']
+    username = request.POST['your_username']
+
+    if Room.objects.filter(name=room).exists():
+        return redirect('/join/' +room+ '/?username=' +username)
+    else:
+        new_room = Room.objects.create(name=room)
+        new_room.save()
+        return redirect('/join/' +room+ '/?username=' +username)
+    
+@login_required(login_url='user_login')
+def send(request):
+        send_message = request.POST['send_message']
+        room_name = request.POST['room']
+        username = request.POST['username']
+
+        # Fetch the user and room objects
+        user = User.objects.get(username=username)
+        room = Room.objects.get(name=room_name)
+
+        # Create and save the message
+        new_message = Roommessage.objects.create(value=send_message, user=user, room=room)
+        new_message.save()
+
+        return HttpResponse('Message sent successfully')
+
+
+@login_required(login_url='user_login')
+def getmessages(request, room):
+    room_details = Room.objects.get(name=room)
+    messages = Roommessage.objects.filter(room=room_details.id)
+
+    # Create a list of messages with username instead of user ID
+    messages_list = []
+    for message in messages:
+        messages_list.append({
+            'user': message.user.username,  # Fetch the username
+            'value': message.value,
+            'date': message.date.strftime('%Y-%m-%d %H:%M'),  # Format the date as needed
+        })
+
+    return JsonResponse({'messages': messages_list})
+
+def room_list(request):
+    rooms = Room.objects.all().annotate(name_lower=Lower('name')).order_by('name_lower')
+    return render(request, 'room/room_list.html', {'rooms': rooms})
+
+
+        

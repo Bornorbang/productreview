@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from app.views import index, aboutus, contactus, terms, privacypolicy, user_login, signup, profile, edit_profile, submit_review, user_logout, submissions, category_reviews, search_reviews
+from app.views import index, aboutus, contactus, terms, privacypolicy, user_login, signup, send, getmessages, profile, edit_profile, room, room_list, checkroom, submit_review, user_logout, submissions, category_reviews, search_reviews, inbox, conversation, joinroom, user_profile, send_message
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -35,7 +35,17 @@ urlpatterns = [
     path("review/", submit_review, name="review"),
     path("submissions/", submissions, name="submissions"),
     path('category/<int:category_id>/', category_reviews, name='category_detail'),
-     path('search/', search_reviews, name='search')
+    path('search/', search_reviews, name='search'),
+    path('inbox/', inbox, name='inbox'),
+    path('conversation/<str:username>/', conversation, name='conversation'),
+    path('profile/<str:username>/', user_profile, name='user_profile'),
+    path('send_message/<str:username>/', send_message, name='send_message'),
+    path('join-room/', joinroom, name="joinroom"),
+    path('join/<str:room>/', room, name='room'),
+    path('checkroom', checkroom, name='checkroom'),
+    path('send/', send, name="send"),
+    path('getmessages/<str:room>/', getmessages, name='getmessages'),
+    path('rooms/', room_list, name="room_list"),
 ]
 
 if settings.DEBUG:

@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import UserProfile, Review
+from .models import UserProfile, Review, Message
 
 
 
@@ -43,3 +43,11 @@ class UserProfileForm(forms.ModelForm):
         self.fields['profile_picture'].widget.attrs.update({
             'class': 'form-control-file'  # Bootstrap class for file input
         })
+
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['receiver', 'content']
+        widgets = {
+            'content': forms.Textarea(attrs={'placeholder': 'Type your message...'}),
+        }

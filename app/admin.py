@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.models import GeneralInfo, UserProfile, Category, Review
+from app.models import GeneralInfo, UserProfile, Category, Review, Message, Room, Roommessage
 
 # Register your models here.
 
@@ -33,3 +33,15 @@ class ReviewAdmin(admin.ModelAdmin):
         'seller',
         
     ]
+
+@admin.register(Message)
+class MessageAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(Room)
+class RoomAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(Roommessage)
+class RoommessageAdmin(admin.ModelAdmin):
+    pass

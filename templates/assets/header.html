@@ -19,13 +19,16 @@
                     <a href="/contact-us" class="nav-item nav-link">Contact</a>
                     <hr>
                 </div>
-                <div class="navbar-nav mx-0 d-lg-none">
-                    <b class="text-dark p-3">{{user.username}}</b>
-                    <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
-                    <a class="nav-item nav-link" href="{% url 'submissions' %}">Submissions</a>
-                    <a class="nav-item nav-link" href="/logout" style="color:red">Logout</a>
-                    <hr>
-                </div>
+                {% if user.is_authenticated %}
+                    <div class="navbar-nav mx-0 d-lg-none">
+                        <b class="text-dark p-3">{{user.username}}</b>
+                        <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+                        <a class="nav-item nav-link" href="{% url 'joinroom' %}">Rooms</a>
+                        <a class="nav-item nav-link" href="{% url 'submissions' %}">Submissions</a>
+                        <a class="nav-item nav-link" href="/logout" style="color:red">Logout</a>
+                        <hr>
+                    </div>
+                {% endif %}
                 <div class="navbar-nav mx-0 d-lg-none">
                     {% if user.is_authenticated %}
                         <a href="{% url 'review' %}" class="btn btn-primary rounded-pill py-2 px-4 ms-3 flex-shrink-0"> Write a Review</a>
@@ -46,6 +49,7 @@
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+                                <a class="dropdown-item" href="{% url 'joinroom' %}">Rooms</a>
                                 <a class="dropdown-item" href="{% url 'submissions' %}">My Submissions</a>
                                 <a class="dropdown-item" href="/logout" style="color:red">Logout</a>
                             </div>
