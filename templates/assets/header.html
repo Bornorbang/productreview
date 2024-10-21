@@ -12,6 +12,14 @@
                 <span class="fa fa-bars"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
+                <form method="GET" action="{% url 'search' %}" class="d-lg-none w-100 my-3">
+                    <div class="input-group">
+                        <input type="search" class="form-control" name="query" placeholder="Search by keyword">
+                        <button class="btn btn-outline-primary" type="submit">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </form>
                 <div class="navbar-nav mx-0 mx-lg-auto ">
                     <a href="{% url 'home' %}" class="nav-item nav-link active">Home</a>
                     <a href="{% url 'aboutus' %}" class="nav-item nav-link ">About Us</a>

@@ -198,6 +198,50 @@ def contactus(request):
 
     return render(request, "contact.html")
 
+def signup(request):
+    if request.method == 'POST':
+        user_form = RegisterForm(request.POST)
+        profile_form = UserProfileForm(request.POST, request.FILES)
+
+        username = request.POST['username']
+        email = request.POST['email']
+        subject = "Welcome to ProductReview.com.ng"
+        admin_email = "info@productreview.com.ng"
+
+        context = {
+            "username": username,
+            "subject": subject,
+            "email": email,
+            "admin_email": admin_email,
+        }
+
+        html_content = render_to_string('email.html', context)
+
+    
+        send_mail(
+                subject=subject,
+                message=None,
+                html_message = html_content,
+                from_email = admin_email,
+                recipient_list = [email],
+                fail_silently = False,
+            )
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user = user_form.save()
+            profile = profile_form.save(commit=False)
+            profile.user = user
+            profile.save()
+
+            messages.success(request, "Registration successful!")
+            return redirect('user_login')
+
+    else:
+        user_form = RegisterForm()
+        profile_form = UserProfileForm()
+
+    return render(request, 'signup.html', {'user_form': user_form, 'profile_form': profile_form})
+
 def terms(request):
 
     context = {
@@ -254,25 +298,7 @@ def user_logout(request):
 #         form = RegisterForm()
 
 #     return render(request, "signup.html", {"form": form})
-def signup(request):
-    if request.method == 'POST':
-        user_form = RegisterForm(request.POST)
-        profile_form = UserProfileForm(request.POST, request.FILES)
 
-        if user_form.is_valid() and profile_form.is_valid():
-            user = user_form.save()
-            profile = profile_form.save(commit=False)
-            profile.user = user
-            profile.save()
-
-            messages.success(request, "Registration successful!")
-            return redirect('user_login')
-
-    else:
-        user_form = RegisterForm()
-        profile_form = UserProfileForm()
-
-    return render(request, 'signup.html', {'user_form': user_form, 'profile_form': profile_form})
 
 
 
