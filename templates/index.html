@@ -12,8 +12,8 @@
                 <div class="row g-4 align-items-center">
                     <div class="col-lg-7 animated fadeInLeft">
                         <div class="text-sm-center text-md-start">
-                            <h4 class="text-white text-uppercase fw-bold mb-4">Welcome To {{general_info.company_name}}</h4>
-                            <h1 class="display-1 text-white mb-4">Your Opinion Matters</h1>
+                            <h4 class="text-white text-uppercase fw-bold mb-4">Welcome To Product Review Nigeria</h4>
+                            <h1 class="display-3 text-white mb-4">Your Opinion Matters</h1>
                             <p class="mb-5 fs-5"> Product Review Nigeria is a community of consumers helping each other make better purchasing decisions.
                             </p>
                             <div class="d-flex justify-content-center justify-content-md-start flex-shrink-0 mb-4">
@@ -26,7 +26,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-5 animated fadeInRight">
+                    <div class="col-lg-5 animated fadeInRight d-none d-lg-block">
                         <div class="calrousel-img" style="object-fit: cover;">
                             <img src="{% static 'assets/img/carousel-2.png' %}" class="img-fluid w-100" alt="">
                         </div>
@@ -40,14 +40,14 @@
             <div class="container">
                 <div class="row gy-4 gy-lg-0 gx-0 gx-lg-5 align-items-center">
                     <div class="col-lg-5 animated fadeInLeft">
-                        <div class="calrousel-img">
+                        <div class="calrousel-img d-none d-lg-block">
                             <img src="{% static 'assets/img/carousel-2.png' %}" class="img-fluid w-100" alt="">
                         </div>
                     </div>
                     <div class="col-lg-7 animated fadeInRight">
                         <div class="text-sm-center text-md-end">
                             <h4 class="text-white text-uppercase fw-bold mb-4">Welcome To Product Review Nigeria</h4>
-                            <h1 class="display-1 text-white mb-4">Voice out your Product Reviews</h1>
+                            <h1 class="display-3 text-white mb-4">Voice out your Reviews</h1>
                             <p class="mb-5 fs-5">We connects consumers with genuine feedback on products and services, helping you make informed choices.
                             </p>
                             <div class="d-flex justify-content-center justify-content-md-end flex-shrink-0 mb-4">
@@ -133,12 +133,18 @@
                                     </p>
                                     <h6 class="card-subtitle mb-2 text-muted">Posted by:</h6>
                                     <div class="d-flex align-items-center fs-7">
-                                        <img src="{{ review.user.userprofile.profile_picture.url }}" 
-                                        alt="User Profile Picture" 
-                                        class="rounded-circle shadow-4-strong" 
-                                        style="width: 50px; height: 50px; object-fit: cover; border: 2px solid #ddd;">
-                                        <span class="fw-bold">{{ review.user.username }}</span>
+                                        <div>
+                                            <img src="{{ review.user.userprofile.profile_picture.url }}" 
+                                            alt="User Profile Picture" 
+                                            class="rounded-circle shadow-4-strong" 
+                                            style="width: 50px; height: 50px; object-fit: cover; border: 2px solid #ddd;">
+                                        </div>
+                                        <div class="ps-2">
+                                            <span class="fw-bold">{{ review.user.username }}</span><br>
+                                            <h6 class="card-subtitle mb-2 text-muted">{{review.user.userprofile.state}}, Nigeria</h6>
+                                        </div>
                                     </div>
+                                    
                                 </div>
                             </div>
                         

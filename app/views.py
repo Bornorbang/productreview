@@ -184,7 +184,7 @@ def contactus(request):
                 subject=contact_subject,
                 message=None,
                 html_message = html_content,
-                from_email = settings.EMAIL_HOST_USER,
+                from_email = contact_email,
                 recipient_list = [settings.EMAIL_HOST_USER],
                 fail_silently = False,
             )
@@ -215,7 +215,7 @@ def signup(request):
             "admin_email": admin_email,
         }
 
-        html_content = render_to_string('email.html', context)
+        html_content = render_to_string('email/signup.html', context)
 
     
         send_mail(

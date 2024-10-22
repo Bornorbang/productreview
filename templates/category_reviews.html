@@ -9,6 +9,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
+    <link rel="icon" href="{% static 'assets/img/favicon.png' %}" type="image/x-icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -38,7 +39,7 @@
     <div class="container-fluid bg-light mt-0 mb-4">
         <div class="container py-5">
             <div class="mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
-                <h2 class="display-4 mb-4">My Submissions</h2>
+                <h2 class="display-4 mb-4">{{category.name}}</h2>
             {% for review in reviews %}
                 <div class="card mb-5 ps-2 wow fadeInUp" data-wow-delay="0.2s">
                     <div class="row g-0 align-items-stretch">
@@ -96,7 +97,7 @@
                     </div>
                 </div>
             {% empty %}
-                <p class="text-dark">You have not submission. <a href="{% url 'review' %}">Click Here</a> to write a review</p>
+                <p class="text-dark">There are no reviews in this category. <a href="{% url 'review' %}">Click Here</a> to write a review</p>
             {% endfor %}
             </div>
         </div>
