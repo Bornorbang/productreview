@@ -321,7 +321,7 @@
 
 @media (max-width: 767px) {
     .header-carousel .header-carousel-item {
-        height: 950px;
+        height: 60vh;
     }
 
     .header-carousel .owl-nav .owl-prev {
@@ -926,4 +926,12 @@ input:checked ~ label, label:hover ~ label {
 input:checked + label:hover, input:checked ~ label:hover, 
 input:checked ~ label:hover ~ label, label:hover ~ input:checked ~ label{
     color: #cc9000
+}
+
+
+@media (max-width: 768px) {
+    .header-carousel-item {
+        height: 60vh; 
+        padding: 50px 0;
+    }
 }
