@@ -935,3 +935,9 @@ input:checked ~ label:hover ~ label, label:hover ~ input:checked ~ label{
         padding: 50px 0;
     }
 }
+
+.comment-content {
+    border: 1px solid #e0dddd;
+    padding: 10px 5px;
+    border-radius: 5px;
+}

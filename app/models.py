@@ -41,6 +41,7 @@ class Category(models.Model):
     def review_count(self):
         """Returns the number of reviews in this category."""
         return self.reviews.count()  # Uses the related_name in the Review model
+    
 
 
 class Review(models.Model):
@@ -67,6 +68,17 @@ class Review(models.Model):
 
     def __str__(self):
         return f"{self.title} by {self.user.username}"
+    
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now=True, blank=True, null=True)
+    content = models.TextField(max_length= 500, null=True, blank=True)
+    review = models.ForeignKey(Review, related_name='comments', on_delete=models.CASCADE, blank=True, null=True)
+
+    def __str__(self):
+        return f"comment by {self.user} on {self.review}"
+    
+
 
 
 class Message(models.Model):

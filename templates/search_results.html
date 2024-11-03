@@ -51,6 +51,11 @@
                                         Sold By: <span style="color: #3a754e;">{{ review.seller }}</span>
                                     </h6>
                                     <h5>{{ review.title }}</h5>
+                                    <div class="d-flex text-primary my-2">
+                                        {% for star in "x"|ljust:review.rating %}
+                                            <i class="bi bi-star-fill" style="color: #ffc107"></i>
+                                        {% endfor %}
+                                    </div>
                                     <p>{{ review.review|truncatechars:100 }}</p>
                                     <small>By {{ review.user.username }} - {{ review.created_at|date:"F j, Y" }}</small>
                                 </div>
@@ -73,7 +78,9 @@
         
     </div>
 <!-- Back to Top -->
-<a href="#" class="btn btn-primary btn-lg-square rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
+<a href="#" class="btn btn-primary btn-lg-square rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>  
+
+{% include 'assets/footer.html' %}
 
     
 <!-- JavaScript Libraries -->

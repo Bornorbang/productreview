@@ -39,69 +39,110 @@
     <div class="container-fluid bg-light mt-0 mb-4">
         <div class="container py-5">
             <div class="mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
-                <h2 class="display-4 mb-4">{{category.name}}</h2>
-            {% for review in reviews %}
-                <div class="card mb-5 ps-2 wow fadeInUp" data-wow-delay="0.2s">
-                    <div class="row g-0 align-items-stretch">
-                        <!-- Left Section: Review Content -->
-                        <div class="col-8 d-flex">
-                            <div class="card-body d-flex flex-column justify-content-between">
-                                <!-- Seller Information -->
-                                <div class="text-center mx-auto mt-2 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
-                                    <h6 class="mb-4 fs-5 border-bottom pb-1">
-                                        Sold By: <span style="color: #3a754e;">{{ review.seller }}</span>
-                                    </h6>
+                <h2 class="display-4 mb-4">{{ category.name }}</h2>
+                {% for review in reviews %}
+                    <div class="card mb-5 ms-2 wow fadeInUp" data-wow-delay="0.2s">
+                        <div class="row g-0 align-items-stretch">
+                            <!-- Left Section: Review Content -->
+                            <div class="col-8 d-flex">
+                                <div class="card-body d-flex flex-column justify-content-between">
+                                    <!-- Seller Information -->
+                                    <div class="text-center mx-auto mt-2 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
+                                        <h6 class="mb-4 fs-5 border-bottom pb-1">
+                                            Sold By: <span style="color: #3a754e;">{{ review.seller }}</span>
+                                        </h6>
+                                    </div>
+        
+                                    <!-- Title -->
+                                    <h4 class="card-title text-dark mb-4">
+                                        <b>{{ review.title }}</b>
+                                    </h4>
+        
+                                    <!-- Rating and Time Since Posted -->
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="d-flex text-primary me-5">
+                                            {% for star in "x"|ljust:review.rating %}
+                                                <i class="bi bi-star-fill" style="color: #ffc107"></i>
+                                            {% endfor %}
+                                        </div>
+                                        <p class="card-subtitle text-muted ms-3 fs-6">
+                                            {{ review.hours_since }} hr{{ review.hours_since|pluralize }} ago
+                                        </p>
+                                    </div>
+        
+                                    <!-- Review Content -->
+                                    <h5 class="card-title text-dark pt-3 pb-3">
+                                        {{ review.review }}
+                                    </h5>
+        
+                                    <!-- User Info -->
+                                    <h6 class="card-subtitle text-muted">Posted by:</h6>
+                                    <div class="d-flex align-items-center fs-7">
+                                        <img src="{{ review.user.userprofile.profile_picture.url }}" 
+                                             alt="User Profile Picture" 
+                                             class="rounded-circle shadow-4-strong" 
+                                             style="width: 50px; height: 50px; object-fit: cover; border: 2px solid #ddd;">
+                                        <span class="fw-bold ms-2">{{ review.user.username }}</span>
+                                    </div>
                                 </div>
-    
-                                <!-- Title -->
-                                <h4 class="card-title text-dark mb-4">
-                                    <b>{{ review.title }}</b>
-                                </h4>
-    
-                                <!-- Rating and Time Since Posted -->
-                                <div class="d-flex align-items-center mb-2">
-                                    <div class="d-flex text-primary me-5">
-                                        {% for star in "x"|ljust:review.rating %}
-                                            <i class="bi bi-star-fill" style="color: #ffc107"></i>
+                            </div>
+        
+                            <!-- Right Section: Review Picture -->
+                            <div class="col-4 d-flex me-0">
+                                <img src="{{ review.picture.url }}" 
+                                     class="img-fluid rounded align-self-stretch" 
+                                     style="object-fit: cover; max-height: 100%;" 
+                                     alt="Review Picture">
+                            </div>
+                        </div>
+                       <!-- Load Comments Button -->
+                        <div class="text-center justify-content-center my-3">
+                            <button class="btn btn-primary w-50" id="toggle-comments-{{ review.id }}" onclick="toggleComments({{ review.id }})">Load Comments</button>
+                        </div>
+                        
+                        <!-- Comments Section -->
+                        <div style="display: none;" id="comments-container-{{ review.id }}">
+                            <div style="background-color: #E8F0FE;" class="border-top mt-2">
+                                <div class="comments-section mt-4 py-3 mx-2 pt-3">
+                                    <h5 class="mb-3 text-primary fw-bold">Comments</h5>
+                                    
+                                    <div id="comments-{{ review.id }}">
+                                        {% for comment in review.comments_list %}
+                                            <div class="comment mb-4">
+                                                <h6 class="fw-bold">{{ comment.user.username }}:</h6><span>{{ comment.created_at }}</span>
+                                                <p class="comment-content my-2">{{ comment.content }}</p>
+                                            </div>
+                                        {% empty %}
+                                            <p>No comments yet. Be the first to comment!</p>
                                         {% endfor %}
                                     </div>
-                                    <p class="card-subtitle text-muted ms-3 fs-6">
-                                        {{ review.hours_since }} hr{{ review.hours_since|pluralize }} ago
-                                    </p>
-                                </div>
-    
-                                <!-- Review Content -->
-                                <h5 class="card-title text-dark pt-3 pb-3">
-                                    {{ review.review }}
-                                </h5>
-    
-                                <!-- User Info -->
-                                <h6 class="card-subtitle text-muted">Posted by:</h6>
-                                <div class="d-flex align-items-center fs-7">
-                                    <img src="{{ review.user.userprofile.profile_picture.url }}" 
-                                         alt="User Profile Picture" 
-                                         class="rounded-circle shadow-4-strong" 
-                                         style="width: 50px; height: 50px; object-fit: cover; border: 2px solid #ddd;">
-                                    <span class="fw-bold ms-2">{{ review.user.username }}</span>
+                                    
+                                    <!-- New Comment Form -->
+                                    {% if user.is_authenticated%}
+                                        <form action="{% url 'post_comment' review.id %}" method="POST">
+                                            {% csrf_token %}
+                                            <div class="input-group">
+                                                <input type="text" name="content" class="form-control" placeholder="Add a comment..." style="height: 60px;" required>
+                                                <button class="btn btn-primary" type="submit">Post</button>
+                                            </div>
+                                        </form>
+                                    {% else %}
+                                        <p> You need to <a href = "{% url 'signup' %}" style="text-decoration: underline;">create an account</a> or <a href="{% url 'user_login' %}" style="text-decoration: underline;">Login</a> to write a comment.
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
-    
-                        <!-- Right Section: Review Picture -->
-                        <div class="col-4 d-flex me-0">
-                            <img src="{{ review.picture.url }}" 
-                                 class="img-fluid rounded align-self-stretch" 
-                                 style="object-fit: cover; max-height: 100%;" 
-                                 alt="Review Picture">
-                        </div>
+
+
+
                     </div>
-                </div>
-            {% empty %}
-                <p class="text-dark">There are no reviews in this category. <a href="{% url 'review' %}">Click Here</a> to write a review</p>
-            {% endfor %}
+                {% empty %}
+                    <p class="text-dark">There are no reviews in this category. <a href="{% url 'review' %}">Click Here</a> to write a review</p>
+                {% endfor %}
             </div>
         </div>
     </div>
+    
     {% include 'assets/footer.html'%}
     <!-- Back to Top -->
     <a href="#" class="btn btn-primary btn-lg-square rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
@@ -120,5 +161,16 @@
 
     <!-- Template Javascript -->
     <script src="{% static 'assets/js/main.js' %}"></script>
+    <script>
+        function toggleComments(reviewId) {
+            const commentsContainer = document.getElementById(`comments-container-${reviewId}`);
+            if (commentsContainer.style.display === "none" || commentsContainer.style.display === "") {
+                commentsContainer.style.display = "block";
+            } else {
+                commentsContainer.style.display = "none";
+            }
+        }
+    </script>
+    
 </body>
 </html>

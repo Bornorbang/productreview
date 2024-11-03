@@ -37,111 +37,166 @@
 <body>
     {% include 'assets/header.html'%}
     <!-- Contact Start -->
-    <div class="container-fluid contact bg-light py-5">
-        <div class="container py-5">
-            <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
-                <h1 class="display-4 mb-4">Write a Review</h1>
-            </div>
-            <div class="row g-5">
-    
-                <div class="card py-4 wow fadeInRight" data-wow-delay="0.4s">
-                    <div>
-                        <h4 class="text-primary">Write a Review</h4>
+<div class="container-fluid contact bg-light py-5">
+    <div class="container py-5">
+        <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
+            <h1 class="display-4 mb-4">Write a Review</h1>
+        </div>
+        <div class="row g-5">
 
+            <div class="card py-4 wow fadeInRight" data-wow-delay="0.4s">
+                    <h4 class="text-primary text-center">Write a Review</h4>
 
-                        <form method="POST" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <div class="row g-3">
-                                <div class="col-12">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="name" name="product_name" placeholder="Product name" required>
-                                        <label for="name">Product name</label>
-                                    </div>
-                                </div>
-                        
-                                <div class="col-12">
-                                    <div class="form-floating">
-                                        <label for="category">Category</label>
-                                        <select name="category" class="form-control" required>
-                                            <option value="" disabled selected></option>
-                                            {% for category in categories %}
-                                                <option value="{{ category.id }}">{{ category.name }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>
-                        
-                                <div class="col-12">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="brand" name="brand" placeholder="Brand" required>
-                                        <label for="brand">Brand</label>
-                                    </div>
-                                </div>
-                        
-                                <div class="col-12">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="seller" name="seller" placeholder="Seller" required>
-                                        <label for="seller">Seller</label>
-                                    </div>
-                                </div>
-                        
-                                <div class="col-12">
-                                    <div class="form-floating">
-                                        <input type="url" class="form-control" id="website" name="website" placeholder="Website">
-                                        <label for="website">Website(optional)</label>
-                                    </div>
-                                </div>
-                        
-                                <div class="col-12">
-                                    <div class="form-floating">
-                                        <textarea class="form-control" id="message" name="review" placeholder="Write your review" style="height: 120px" required></textarea>
-                                        <label for="message">Write your Review</label>
-                                    </div>
-                                </div>
-                        
-                                <div class="col-12">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="title" name="title" placeholder="Give your review a title" required>
-                                        <label for="title">Give your review a title</label>
-                                    </div>
-                                </div>
-                        
-                                <div class="col-12">
-                                    <label for="rating">Rating:</label>
-                                    <div class="star-rating">
-                                        <input type="radio" name="rating" id="rating5" value="5" required>
-                                        <label for="rating5" title="5"></label>
-                                        <input type="radio" name="rating" id="rating4" value="4" required>
-                                        <label for="rating4" title="4"></label>
-                                        <input type="radio" name="rating" id="rating3" value="3" required>
-                                        <label for="rating3" title="3"></label>
-                                        <input type="radio" name="rating" id="rating2" value="2" required>
-                                        <label for="rating2" title="2"></label>
-                                        <input type="radio" name="rating" id="rating1" value="1" required>
-                                        <label for="rating1" title="1"></label>
-                                    </div>
-                                </div>
-                        
-                                <div class="form-group mt-3">
-                                    <label for="picture">Attach public photos and videos</label><br><br>
-                                    <input type="file" class="form-control-file" id="picture" name="picture" required>
-                                </div>
-                        
-                                <div class="d-flex justify-content-center align-items-center my-5">
-                                    <div class="col-lg-6">
-                                        <button type="submit" class="btn btn-primary w-100 py-3">Submit Review</button>
-                                    </div>
+                    <!-- Button Group -->
+                    <div class="justify-content-around align-content-center my-4" id="review-button" style="display: flex;">
+                        <button type="button" class="btn btn-primary p-3" onclick="showReviewForm('product')">For a Product</button>
+                        <button type="button" class="btn btn-primary p-3" onclick="showReviewForm('service')">For a Service</button>
+                    </div>
+
+                    <!-- Product Review Form -->
+                    <form id="product-review-form" method="POST" enctype="multipart/form-data" style="display: none;">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="product_name" name="product_name" placeholder="Product name" required>
+                                    <label for="product_name">Product name</label>
                                 </div>
                             </div>
-                        </form>
-                        
-                    </div>
-                </div>
-               
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <label for="category">Category</label>
+                                    <select name="category" class="form-control" required>
+                                        <option value="" disabled selected></option>
+                                        {% for category in categories %}
+                                            <option value="{{ category.id }}">{{ category.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="brand" name="brand" placeholder="Brand">
+                                    <label for="brand">Brand (optional)</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="seller" name="seller" placeholder="Seller" required>
+                                    <label for="seller">Seller</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input type="url" class="form-control" id="website" name="website" placeholder="Website">
+                                    <label for="website">Website (optional)</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <textarea class="form-control" id="message" name="review" placeholder="Write your review" style="height: 120px" required></textarea>
+                                    <label for="message">Write your Review</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="title" name="title" placeholder="Give your review a title" required>
+                                    <label for="title">Give your review a title</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label for="rating">Rating:</label>
+                                <div class="star-rating">
+                                    <input type="radio" name="rating" id="product_rating5" value="5" required>
+                                    <label for="product_rating5" title="5"></label>
+                                    <input type="radio" name="rating" id="product_rating4" value="4" required>
+                                    <label for="product_rating4" title="4"></label>
+                                    <input type="radio" name="rating" id="product_rating3" value="3" required>
+                                    <label for="product_rating3" title="3"></label>
+                                    <input type="radio" name="rating" id="product_rating2" value="2" required>
+                                    <label for="product_rating2" title="2"></label>
+                                    <input type="radio" name="rating" id="product_rating1" value="1" required>
+                                    <label for="product_rating1" title="1"></label>
+                                </div>
+                            </div>                            
+                            <div class="form-group mt-3">
+                                <label for="picture">Attach public photos and videos</label><br><br>
+                                <input type="file" class="form-control-file" id="picture" name="picture" required>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center my-5">
+                                <div class="col-lg-6">
+                                    <button type="submit" class="btn btn-primary w-100 py-3">Submit Review</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Service Review Form -->
+                    <form id="service-review-form" method="POST" enctype="multipart/form-data" style="display: none;">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="product_name" name="product_name" placeholder="Service name" required>
+                                    <label for="product_name">Service name</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <label for="category">Category</label>
+                                    <input type="hidden" name="category" value="{{ services_category_id }}">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="seller" name="seller" placeholder="Seller" required>
+                                    <label for="seller">Seller</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <textarea class="form-control" id="review" name="review" placeholder="Write your service review" style="height: 120px" required></textarea>
+                                    <label for="review">Write your Service Review</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="title" name="title" placeholder="Give your review a title" required>
+                                    <label for="title">Give your review a title</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label for="rating">Rating:</label>
+                                <div class="star-rating">
+                                    <input type="radio" name="rating" id="service_rating5" value="5" required>
+                                    <label for="service_rating5" title="5"></label>
+                                    <input type="radio" name="rating" id="service_rating4" value="4" required>
+                                    <label for="service_rating4" title="4"></label>
+                                    <input type="radio" name="rating" id="service_rating3" value="3" required>
+                                    <label for="service_rating3" title="3"></label>
+                                    <input type="radio" name="rating" id="service_rating2" value="2" required>
+                                    <label for="service_rating2" title="2"></label>
+                                    <input type="radio" name="rating" id="service_rating1" value="1" required>
+                                    <label for="service_rating1" title="1"></label>
+                                </div>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="picture">Attach public photos and videos</label><br><br>
+                                <input type="file" class="form-control-file" id="picture" name="picture" required>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center my-5">
+                                <div class="col-lg-6">
+                                    <button type="submit" class="btn btn-primary w-100 py-3">Submit Review</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
             </div>
         </div>
     </div>
     <!-- Contact End -->
+
+    {% include 'assets/footer.html' %}
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-primary btn-lg-square rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
@@ -160,5 +215,23 @@
 
     <!-- Template Javascript -->
     <script src="{% static 'assets/js/main.js' %}"></script>
+
+    <script>
+        function showReviewForm(type) {
+            const productForm = document.getElementById('product-review-form');
+            const serviceForm = document.getElementById('service-review-form');
+            const reviewButton = document.getElementById('review-button')
+
+            if (type === 'product') {
+                productForm.style.display = 'block';
+                serviceForm.style.display = 'none';
+                reviewButton.style.display = 'none';
+            } else {
+                productForm.style.display = 'none';
+                serviceForm.style.display = 'block';
+                reviewButton.style.display = 'none';
+            }
+        }
+    </script>
 </body>
 </html>

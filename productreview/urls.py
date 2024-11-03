@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from app.views import index, aboutus, contactus, terms, privacypolicy, user_login, signup, send, getmessages, profile, edit_profile, room, room_list, checkroom, submit_review, user_logout, submissions, category_reviews, search_reviews, inbox, conversation, joinroom, user_profile, send_message
+from app.views import (index, aboutus, contactus, terms, privacypolicy, user_login, load_comments, signup, send, getmessages, profile, 
+                       edit_profile, room, room_list, checkroom, submit_review, user_logout, submissions, category_reviews, search_reviews, 
+                       inbox, conversation, joinroom, user_profile, send_message, post_comment)
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -46,6 +48,9 @@ urlpatterns = [
     path('send/', send, name="send"),
     path('getmessages/<str:room>/', getmessages, name='getmessages'),
     path('rooms/', room_list, name="room_list"),
+    path('reviews/<int:review_id>/comments/', load_comments, name='load_comments'),
+    path('reviews/<int:review_id>/comment/', post_comment, name='post_comment'),
+
 ]
 
 if settings.DEBUG:

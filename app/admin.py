@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.models import GeneralInfo, UserProfile, Category, Review, Message, Room, Roommessage
+from app.models import GeneralInfo, UserProfile, Category, Review, Message, Room, Roommessage, Comment
 
 # Register your models here.
 
@@ -45,3 +45,11 @@ class RoomAdmin(admin.ModelAdmin):
 @admin.register(Roommessage)
 class RoommessageAdmin(admin.ModelAdmin):
     pass
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = [
+        'user',
+        'content',
+        'created_at'
+    ]

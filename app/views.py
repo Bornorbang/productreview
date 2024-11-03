@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
-from app.models import Review, UserProfile, Category, Message, Room, Roommessage
+from app.models import Review, UserProfile, Category, Message, Room, Roommessage, Comment
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, login as auth_login, logout
 from django.contrib import messages
@@ -10,6 +10,7 @@ from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from app.forms import RegisterForm, UserProfileForm, ReviewForm, MessageForm
 from datetime import datetime
+from django.utils import timezone
 from django.utils.timezone import make_aware, now
 from django.db.models import Q
 from django.db.models.functions import Lower
@@ -92,6 +93,7 @@ def submissions(request):
 @login_required(login_url='user_login')
 def submit_review(request):
     categories = Category.objects.all()
+    services_category = get_object_or_404(Category, name="Services")
 
     if request.method == "POST":
         form = ReviewForm(request.POST, request.FILES)
@@ -106,27 +108,59 @@ def submit_review(request):
         else:
             messages.error(request, "Please correct the errors below.")
 
-    return render(request, 'review.html', {'categories': categories, 'form': ReviewForm()})
-
-
+    return render(request, 'review.html', {'categories': categories, 'services_category_id': services_category.id, 'form': ReviewForm()})
 
 
 def category_reviews(request, category_id):
     category = get_object_or_404(Category, id=category_id)
     reviews = Review.objects.filter(category=category).order_by('-created_at')
-    user_profile = get_object_or_404(UserProfile, user=request.user)
 
     for review in reviews:
         delta = now() - review.created_at
         review.hours_since = int(delta.total_seconds() // 3600)
+        
+        # Access comments directly using the related manager
+        review.comments_list = review.comments.all().order_by('-created_at')
     
     context = {
-        'category': category, 
+        'category': category,
         'reviews': reviews,
-        'user_profile': user_profile,
     }
     
     return render(request, 'category_reviews.html', context)
+
+
+def load_comments(request, review_id):
+    review = Review.objects.get(id=review_id)
+    comments = review.comment.objects.all()
+
+    context = {
+        'review': review,
+        'comments': comments,
+    }
+
+    # return JsonResponse({'comments': list(comments)})
+    return render(request, 'category_detail', context)
+
+@login_required(login_url='user_login')
+def post_comment(request, review_id):
+    if request.method == 'POST':
+        review = get_object_or_404(Review, id=review_id)
+        
+        # Only proceed if the user is authenticated
+        if request.user.is_authenticated:
+            comment = Comment.objects.create(
+                created_at=timezone.now(),
+                user=request.user,  # This will now be a User instance
+                content=request.POST['content'],
+                review = review,
+            )
+            comment.save()
+
+            return redirect('category_detail', review.category.id)
+        
+        else:
+            return redirect('user_login')
 
 def search_reviews(request):
     query = request.GET.get('query', '')  # Get the search term from the request
