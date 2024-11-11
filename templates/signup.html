@@ -18,24 +18,25 @@
             <div class="card py-4 wow fadeInRight" data-wow-delay="0.4s">
                 <div>
                     <h4 class="text-primary">Create an Account</h4>
-                    {% comment %} <p class="mb-4 alert alert-primary" role="alert">You will be contacting ProductReview.com.ng, an independent consumer opinion website. We are not representatives of any brands or companies featured on this site and are not able to answer any questions on their behalf.</p> {% endcomment %}
-                    {% if form.non_field_errors %}
-                        <div class="alert alert-danger">
-                            {{ form.non_field_errors }}  <!-- Display non-field errors here -->
-                        </div>
-                    {% endif %}
-    
-                    {% if form.errors %}
-                        <div class="alert alert-danger">
-                            <ul>
-                                {% for field in form %}
-                                    {% for error in field.errors %}
-                                        <li>{{ error }}</li>  <!-- List all errors for each field -->
-                                    {% endfor %}
+                    {% if messages %}
+                                {% for message in messages%}
+                                    {% if message.tags == "success"%}
+                                    <div class="alert alert-success alert-dismissible" role="alert">
+
+                                        <p class="mb-4">{{message}}</p>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                        </button>
+                                    </div>
+                                    {% else %}
+                                        <div class="alert alert-danger alert-dismissible" role="alert">
+                                            <p class="mb-4">{{message}}</p>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                            </button>
+                                        </div>
+                                    {% endif %}
+
                                 {% endfor %}
-                            </ul>
-                        </div>
-                    {% endif %}
+                            {% endif %}
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="row g-3">

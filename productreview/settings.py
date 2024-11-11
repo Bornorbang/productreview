@@ -148,4 +148,4 @@ SESSION_COOKIE_AGE = 1209600  # 2 weeks (in seconds)
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Keep the session active across browser sessions
 SESSION_SAVE_EVERY_REQUEST = True  # Update session expiry on every request
 
-LOGIN_URL = 'login'
+# LOGIN_URL = 'login'

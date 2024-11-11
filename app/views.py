@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
-from app.models import Review, UserProfile, Category, Message, Room, Roommessage, Comment
+from app.models import Review, UserProfile, Category, Message, Room, Roommessage, Comment, PasswordReset
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, login as auth_login, logout
 from django.contrib import messages
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMessage
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
@@ -14,6 +14,7 @@ from django.utils import timezone
 from django.utils.timezone import make_aware, now
 from django.db.models import Q
 from django.db.models.functions import Lower
+from django.urls import reverse
 
 # Create your views here.
 
@@ -200,22 +201,26 @@ def aboutus(request):
 def contactus(request):
     if request.method == 'POST':
         contact_name = request.POST['contact_name']
+        contact_phone = request.POST['contact_phone']
         contact_email = request.POST['contact_email']
         contact_subject = request.POST['contact_subject']
         contact_message = request.POST['contact_message']
+        admin_email = "info@productreview.com.ng"
 
         context = {
             "contact_name": contact_name,
             "contact_email": contact_email,
             "contact_subject": contact_subject,
-            "contact_message": contact_message
+            "contact_message": contact_message,
+            "contact_phone": contact_phone,
+            "admin_email": admin_email,
         }
 
-        html_content = render_to_string('email.html', context)
+        html_content = render_to_string('email/contactus.html', context)
 
         try:
             send_mail(
-                subject=contact_subject,
+                subject=f"{contact_subject} from {contact_name}",
                 message=None,
                 html_message = html_content,
                 from_email = contact_email,
@@ -239,28 +244,50 @@ def signup(request):
 
         username = request.POST['username']
         email = request.POST['email']
+        password = request.POST['password1']
         subject = "Welcome to ProductReview.com.ng"
         admin_email = "info@productreview.com.ng"
 
+        user_data_has_error = False
+
+        # Check if username already exists
+        if User.objects.filter(username=username).exists():
+            user_data_has_error = True
+            messages.error(request, "Username already exists.")
+
+        # Check if email already exists
+        if User.objects.filter(email=email).exists():
+            user_data_has_error = True
+            messages.error(request, "An account already exists with this email address.")
+
+        # Check password length
+        if len(password) < 6:
+            user_data_has_error = True
+            messages.error(request, "Password must be longer than 6 characters and contain symbols.")
+
+        # Redirect to signup page if there are errors
+        if user_data_has_error:
+            return render(request, 'signup.html', {'user_form': user_form, 'profile_form': profile_form})
+
+        # Send welcome email
         context = {
             "username": username,
             "subject": subject,
             "email": email,
             "admin_email": admin_email,
         }
-
         html_content = render_to_string('email/signup.html', context)
 
-    
         send_mail(
-                subject=subject,
-                message=None,
-                html_message = html_content,
-                from_email = admin_email,
-                recipient_list = [email],
-                fail_silently = False,
-            )
+            subject=subject,
+            message=None,
+            html_message=html_content,
+            from_email=admin_email,
+            recipient_list=[email],
+            fail_silently=False,
+        )
 
+        # Save user and profile if forms are valid
         if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save()
             profile = profile_form.save(commit=False)
@@ -275,6 +302,102 @@ def signup(request):
         profile_form = UserProfileForm()
 
     return render(request, 'signup.html', {'user_form': user_form, 'profile_form': profile_form})
+
+def forgot_password(request):
+    if request.method == "POST":
+        email = request.POST.get("email")
+        admin_email = "info@productreview.com.ng"
+        subject = "Reset Your Password"
+
+        try:
+            user = User.objects.get(email=email)
+
+            new_password = PasswordReset(user=user)
+            new_password.save()
+
+            password_reset_url = reverse('reset_password', kwargs={'reset_id': new_password.reset_id})
+
+            full_password_reset_url = f"{request.scheme}://{request.get_host()}{password_reset_url}"
+
+            context = {
+            "email": email,
+            "subject": subject,
+            "admin_email": admin_email,
+            "full_password_reset_url": full_password_reset_url,
+            }
+            html_content = render_to_string('email/forgot_password.html', context)
+
+            send_mail(
+                subject=subject,
+                message=None,
+                html_message=html_content,
+                from_email=admin_email,
+                recipient_list=[email],
+                fail_silently=False,
+            )
+
+            return redirect("password_reset_sent", reset_id=new_password.reset_id)
+
+        
+        except User.DoesNotExist:
+            messages.error(request, f"Email address is not registered on this website.")
+            return redirect('forgot_password')
+
+
+    return render(request, "forgot_password.html")
+
+def password_reset_sent(request, reset_id):
+    if PasswordReset.objects.filter(reset_id=reset_id).exists():
+        return render(request, "password_reset_sent.html")
+    
+    else:
+        messages.error(request, "Reset Link is invalid")
+        return redirect('forgot_password')
+
+def reset_password(request, reset_id):
+    try:
+        password_reset_id = PasswordReset.objects.get(reset_id=reset_id)
+
+        if request.method == "POST":
+            reset_password = request.POST.get("reset_password")
+            confirm_reset_password = request.POST.get("confirm_reset_password")
+
+            password_have_error = False
+
+            if reset_password != confirm_reset_password:
+                password_have_error = True
+                messages.error(request, "Password do not match")
+            
+            if len(reset_password) < 6:
+                password_have_error = True
+                messages.error(request,  "Password must be longer than 6 characters and contain symbols.")
+
+            expiration_time = password_reset_id.created_at + timezone.timedelta(minutes=30)
+
+            if timezone.now() > expiration_time:
+                password_have_error =  True
+                password_reset_id.delete()
+                messages.error(request, "Reset Link has expired.")
+
+            if not password_have_error:
+                user = password_reset_id.user
+                user.set_password(reset_password)
+                user.save()
+
+                password_reset_id.delete()
+
+                messages.success(request, "Password reset. Proceed to login")
+                return redirect('user_login')
+
+            else:
+                return redirect("reset_password", reset_id=reset_id)
+
+    except PasswordReset.DoesNotExist:
+        messages.error(request, "Invalid Reset Link")
+        return redirect('forgot_password')
+
+
+    return render(request, "reset_password.html")
 
 def terms(request):
 
