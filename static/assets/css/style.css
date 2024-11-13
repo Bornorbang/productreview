@@ -941,3 +941,13 @@ input:checked ~ label:hover ~ label, label:hover ~ input:checked ~ label{
     padding: 10px 5px;
     border-radius: 5px;
 }
+
+.footer-logo{
+    width: 80%;
+}
+
+@media (max-width: 727px){
+    .footer-logo{
+        width: 50%;
+    }
+}
