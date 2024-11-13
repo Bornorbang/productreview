@@ -1,6 +1,6 @@
 from django.contrib import admin
 from app.models import (GeneralInfo, UserProfile, Category, 
-                        Review, Message, Room, Roommessage, Comment, PasswordReset)
+                        Review, Message, Room, Roommessage, Comment, PasswordReset, Newsletter)
 
 # Register your models here.
 
@@ -56,5 +56,9 @@ class CommentAdmin(admin.ModelAdmin):
     ]
 
 @admin.register(PasswordReset)
-class PasswordReset(admin.ModelAdmin):
+class PasswordResetAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(Newsletter)
+class NewsletterAdmin(admin.ModelAdmin):
     pass

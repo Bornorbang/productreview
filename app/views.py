@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
-from app.models import Review, UserProfile, Category, Message, Room, Roommessage, Comment, PasswordReset
+from app.models import Review, UserProfile, Category, Message, Room, Roommessage, Comment, PasswordReset, Newsletter
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, login as auth_login, logout
 from django.contrib import messages
@@ -306,7 +306,6 @@ def signup(request):
 def forgot_password(request):
     if request.method == "POST":
         email = request.POST.get("email")
-        admin_email = "info@productreview.com.ng"
         subject = "Reset Your Password"
 
         try:
@@ -322,7 +321,6 @@ def forgot_password(request):
             context = {
             "email": email,
             "subject": subject,
-            "admin_email": admin_email,
             "full_password_reset_url": full_password_reset_url,
             }
             html_content = render_to_string('email/forgot_password.html', context)
@@ -331,7 +329,7 @@ def forgot_password(request):
                 subject=subject,
                 message=None,
                 html_message=html_content,
-                from_email=admin_email,
+                from_email=settings.EMAIL_HOST_USER,
                 recipient_list=[email],
                 fail_silently=False,
             )
@@ -628,6 +626,22 @@ def getmessages(request, room):
 def room_list(request):
     rooms = Room.objects.all().annotate(name_lower=Lower('name')).order_by('name_lower')
     return render(request, 'room/room_list.html', {'rooms': rooms})
+
+def newsletter(request):
+    if request.method == "POST":
+        email_news =  request.POST.get("email_news")
+
+        if email_news:
+            if not Newsletter.objects.filter(email=email_news).exists():
+                Newsletter.objects.create(email=email_news)
+                messages.success(request, "You've successfully subscribed to our newsletter!")
+
+            else:
+                messages.info(request, "You're already subscribed.")
+            return redirect('home')
+    return redirect('home')
+
+
 
 
         

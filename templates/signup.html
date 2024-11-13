@@ -19,24 +19,24 @@
                 <div>
                     <h4 class="text-primary">Create an Account</h4>
                     {% if messages %}
-                                {% for message in messages%}
-                                    {% if message.tags == "success"%}
-                                    <div class="alert alert-success alert-dismissible" role="alert">
+                        {% for message in messages%}
+                            {% if message.tags == "success"%}
+                            <div class="alert alert-success alert-dismissible" role="alert">
 
-                                        <p class="mb-4">{{message}}</p>
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                                        </button>
-                                    </div>
-                                    {% else %}
-                                        <div class="alert alert-danger alert-dismissible" role="alert">
-                                            <p class="mb-4">{{message}}</p>
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                                            </button>
-                                        </div>
-                                    {% endif %}
-
-                                {% endfor %}
+                                <p class="mb-4">{{message}}</p>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                </button>
+                            </div>
+                            {% else %}
+                                <div class="alert alert-danger alert-dismissible" role="alert">
+                                    <p class="mb-4">{{message}}</p>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                    </button>
+                                </div>
                             {% endif %}
+
+                        {% endfor %}
+                    {% endif %}
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="row g-3">

@@ -119,3 +119,7 @@ class PasswordReset(models.Model):
 
     def __str__(self):
         return f"Password reset for {self.user.username} at {self.created_at}"
+    
+class Newsletter(models.Model):
+    email =  models.EmailField(max_length=254, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)

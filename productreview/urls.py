@@ -18,7 +18,8 @@ from django.contrib import admin
 from django.urls import path
 from app.views import (index, aboutus, contactus, terms, privacypolicy, user_login, load_comments, signup, send, getmessages, profile, 
                        edit_profile, room, room_list, checkroom, submit_review, user_logout, submissions, category_reviews, search_reviews, 
-                       inbox, conversation, joinroom, user_profile, send_message, post_comment, password_reset_sent, reset_password, forgot_password)
+                       inbox, conversation, joinroom, user_profile, send_message, post_comment, password_reset_sent, reset_password, forgot_password,
+                       newsletter)
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -52,7 +53,8 @@ urlpatterns = [
     path('reviews/<int:review_id>/comment/', post_comment, name='post_comment'),
     path("forgot_password", forgot_password, name="forgot_password"), 
     path("reset_password/<str:reset_id>", reset_password, name="reset_password"),
-    path("password_reset_sent/<str:reset_id>", password_reset_sent, name="password_reset_sent")
+    path("password_reset_sent/<str:reset_id>", password_reset_sent, name="password_reset_sent"),
+    path("subscription/", newsletter, name="newsletter")
 
 ]
 
