@@ -946,7 +946,7 @@ input:checked ~ label:hover ~ label, label:hover ~ input:checked ~ label{
     width: 80%;
 }
 
-@media (max-width: 727px){
+@media (max-width: 827px){
     .footer-logo{
         width: 50%;
     }
