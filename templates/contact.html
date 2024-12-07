@@ -24,23 +24,25 @@
                         <div>
                             <h4 class="text-primary">Send Your Message</h4>
 
-                            {% for message in messages%}
-                                {% if message.tags == "success"%}
-                                <div class="alert alert-success alert-dismissible" role="alert">
+                            {% if messages %}
+                                {% for message in messages%}
+                                    {% if message.tags == "success"%}
+                                    <div class="alert alert-success alert-dismissible" role="alert">
 
-                                    <p class="mb-4">Contact form was sent successfully. Thank you!</p>
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                                    </button>
-                                </div>
-                                {% else %}
-                                    <div class="alert alert-danger alert-dismissible" role="alert">
-                                        <p class="mb-4">Error sending contact form. Please try again later!</p>
+                                        <p class="mb-4">Contact form was sent successfully. Thank you!</p>
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                                         </button>
                                     </div>
-                                {% endif %}
+                                    {% else %}
+                                        <div class="alert alert-danger alert-dismissible" role="alert">
+                                            <p class="mb-4">Error sending contact form. Please try again later!</p>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                            </button>
+                                        </div>
+                                    {% endif %}
 
-                            {% endfor %}
+                                {% endfor %}
+                            {% endif %}
 
                             <form method="post" action="{% url 'contactus' %}">
                                 {% csrf_token %}

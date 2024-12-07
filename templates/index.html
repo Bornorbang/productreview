@@ -48,7 +48,7 @@
                         <div class="text-sm-center text-md-end">
                             <h4 class="text-white text-uppercase fw-bold mb-4">Welcome To Product Review Nigeria</h4>
                             <h1 class="display-3 text-white mb-4">Voice out your Reviews</h1>
-                            <p class="mb-5 fs-5">We connects consumers with genuine feedback on products and services, helping you make informed choices.
+                            <p class="mb-5 fs-5">We connects consumers with genuine feedback on products and services, helping you make informed purchasing choices.
                             </p>
                             <div class="d-flex justify-content-center justify-content-md-end flex-shrink-0 mb-4">
                                 {% if not user.is_authenticated%}
@@ -80,16 +80,19 @@
             {% for category in categories %}
                 <div class="col-12 col-md-6 col-lg-3 mb-4">
                     <a href="{% url 'category_detail' category_id=category.id %}">
-                        <div class="custom-card" style="background-image: url('{{ category.image_url }}');">
-                            <h5 class="card-title">{{ category.name }}</h5>
+                        <div 
+                            class="custom-card" 
+                            style="background-image: url('{{ category.image_url }}'); height: 200px; background-size: cover; background-position: center; position: relative;">
+                            <span class="visually-hidden">Product Review Nigeria</span>
+                            <h5 class="card-title mt-2">{{ category.name }}</h5>
                             <p class="card-text">{{ category.review_count }} reviews</p>
                         </div>
                     </a>
                 </div>
             {% endfor %}
         </div>
-        
     </div>
+    
 </div>
 <!--Categories End-->
 
