@@ -140,8 +140,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.mailgun.org'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'postmaster@sandboxc1e7bdf870264628b43578573fdb6b4f.mailgun.org'
-EMAIL_HOST_PASSWORD = '0b2f5f584e2b7e42a7629782c0249c1d-79295dd0-6a908396'
+EMAIL_HOST_USER = '###'
+EMAIL_HOST_PASSWORD = '##'
 
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Store sessions in the database
